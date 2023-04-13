@@ -1,5 +1,7 @@
+# lets create the codebuild project: plan and apply
+
 resource "aws_codebuild_project" "tf-plan" {
-  name         = "tf-plan"
+  name         = "terraform-plan"
   description  = "plan stage for terraform"
   service_role = aws_iam_role.tf-codebuild-role.arn
 
@@ -18,13 +20,14 @@ resource "aws_codebuild_project" "tf-plan" {
   }
   source {
     type      = "CODEPIPELINE"
-    buildspec = file("buildspec/plan-builspec.yaml")
+    buildspec = file("buildspec/plan-buildspec.yaml")
   }
 
 }
+# this phase does the terraform apply
 
 resource "aws_codebuild_project" "tf-apply" {
-  name         = "tf-apply"
+  name         = "terraform-apply"
   description  = "plan stage for terraform"
   service_role = aws_iam_role.tf-codebuild-role.arn
 
@@ -43,15 +46,17 @@ resource "aws_codebuild_project" "tf-apply" {
   }
   source {
     type      = "CODEPIPELINE"
-    buildspec = file("buildspec/apply-builspec.yaml")
+    buildspec = file("buildspec/apply-buildspec.yaml")
   }
 
 }
+
+# let's creeate the codepipeline to orchestrate all of this
 
 resource "aws_codepipeline" "cicd_pipeline" {
 
-  name     = "tf-cicd"
-  role_arn = aws_iam_role.tf-codepipeline-role.arn
+  name     = "terraform-cicd-codepipeline"
+  role_arn = aws_iam_role.tf_codepipeline_role.arn  
 
   artifact_store {
     type     = "S3"
@@ -66,7 +71,7 @@ resource "aws_codepipeline" "cicd_pipeline" {
       owner            = "AWS"
       provider         = "CodeStarSourceConnection"
       version          = "1"
-      output_artifacts = ["tf-code"]
+      output_artifacts = ["terraform-code"]
       configuration = {
         FullRepositoryId     = "carlrcloud/cicdpilpline-terraform"
         BranchName           = "main"
@@ -84,7 +89,8 @@ resource "aws_codepipeline" "cicd_pipeline" {
       provider        = "CodeBuild"
       version         = "1"
       owner           = "AWS"
-      input_artifacts = ["tf-code"]
+      input_artifacts = ["terraform-code"]
+      output_artifacts = ["source-output"]
       configuration = {
         ProjectName = "tf-plan"
       }
@@ -99,7 +105,7 @@ resource "aws_codepipeline" "cicd_pipeline" {
       provider        = "CodeBuild"
       version         = "1"
       owner           = "AWS"
-      input_artifacts = ["tf-code"]
+      input_artifacts = ["source-output"]
       configuration = {
         ProjectName = "tf-apply"
       }
