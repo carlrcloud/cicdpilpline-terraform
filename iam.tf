@@ -56,12 +56,8 @@ resource "aws_iam_role" "tf-codebuild-role" {
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": [
-                "codebuild:*"
-            ],
-            "Resource": [
-                "*"
-            ]
+            "Action":"*",
+            "Resource":"*"
         }
     ]
 }
