@@ -52,21 +52,23 @@ resource "aws_iam_role" "tf-codebuild-role" {
 
   assume_role_policy = <<EOF
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "codebuild.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codebuild:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
 }
 EOF
-
 }
+
+
 
 data "aws_iam_policy_document" "tf-cicd-build-policies" {
   statement {
