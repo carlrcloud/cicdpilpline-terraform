@@ -80,7 +80,7 @@ resource "aws_codepipeline" "cicd_pipeline" {
       }
     }
   }
-
+# terraform plan
   stage {
     name = "Plan"
     action {
