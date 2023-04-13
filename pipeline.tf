@@ -90,10 +90,10 @@ resource "aws_codepipeline" "cicd_pipeline" {
       version         = "1"
       owner           = "AWS"
       input_artifacts = ["terraform-code"]
-      output_artifacts = ["source-output"]
-      # configuration = {
-      #   ProjectName = "tf-plan"
-      # }
+      output_artifacts = ["plan-output"]
+      configuration = {
+        ProjectName = "source-output"
+      }
     }
   }
 
@@ -105,7 +105,7 @@ resource "aws_codepipeline" "cicd_pipeline" {
       provider        = "CodeBuild"
       version         = "1"
       owner           = "AWS"
-      input_artifacts = ["source-output"]
+      input_artifacts = ["plan-output"]
       configuration = {
         ProjectName = "tf-apply"
       }
