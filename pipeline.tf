@@ -68,7 +68,7 @@ resource "aws_codepipeline" "cicd_pipeline" {
             version = "1"
             output_artifacts = ["tf-code"]
             configuration = {
-                FullRepositoryId = "carlcloud/cicdpipeline-terraform"
+                FullRepositoryId = "carlrcloud/cicdpilpline-terraform"
                 BranchName   = "main"
                 ConnectionArn = var.codestar_connector_credentials
                 OutputArtifactFormat = "CODE_ZIP"
@@ -86,7 +86,7 @@ resource "aws_codepipeline" "cicd_pipeline" {
             owner = "AWS"
             input_artifacts = ["tf-code"]
             configuration = {
-                ProjectName = "tf-cicd-plan"
+                ProjectName = "tf-plan"
             }
         }
     }
@@ -101,7 +101,7 @@ resource "aws_codepipeline" "cicd_pipeline" {
             owner = "AWS"
             input_artifacts = ["tf-code"]
             configuration = {
-                ProjectName = "tf-cicd-apply"
+                ProjectName = "tf-apply"
             }
         }
     }
