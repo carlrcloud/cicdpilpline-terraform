@@ -91,9 +91,9 @@ resource "aws_codepipeline" "cicd_pipeline" {
       owner           = "AWS"
       input_artifacts = ["terraform-code"]
       output_artifacts = ["source-output"]
-      configuration = {
-        ProjectName = "tf-plan"
-      }
+      # configuration = {
+      #   ProjectName = "tf-plan"
+      # }
     }
   }
 
